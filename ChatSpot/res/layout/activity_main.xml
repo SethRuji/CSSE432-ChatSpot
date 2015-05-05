@@ -1,12 +1,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" >
+    android:layout_margin="5dp" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/messageScrollView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_above="@+id/inputWrapper"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:id="@+id/messageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+        android:id="@+id/inputWrapper"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/messageBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:hint="Type a message..."
+            android:inputType="textCapSentences"
+            android:imeOptions="actionSend" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Send" />
+    </LinearLayout>
 
 </RelativeLayout>
