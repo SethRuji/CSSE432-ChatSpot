@@ -1,13 +1,22 @@
 package edu.rosehulman.chatspot;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
@@ -51,6 +60,75 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 			}
 		} else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 			// Respond to new connection or disconnections
+			 if (mManager == null) {
+	                return;
+	            }
+
+	            NetworkInfo networkInfo = (NetworkInfo) intent
+	                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+	            if (networkInfo.isConnected()) {
+
+	                // We are connected with the other device, request connection
+	                // info to find group owner IP
+
+	                mManager.requestConnectionInfo(mChannel, new ConnectionInfoListener() {
+						
+	                	@Override
+	                    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+	                        // InetAddress from WifiP2pInfo struct.
+	                        InetAddress groupOwnerAddress = info.groupOwnerAddress;
+
+	                        // After the group negotiation, we can determine the group owner.
+	                        if (info.groupFormed && info.isGroupOwner) {
+	                            //server stuff
+								new MessageAsyncTask(mActivity).execute();
+	                        } else if (info.groupFormed) {
+	                            //client stuff
+	                        	Socket socket = new Socket();
+	                        	byte buf[]  = new byte[1024];
+	                        	try {
+	                        	    /**
+	                        	     * Create a client socket with the host,
+	                        	     * port, and timeout information.
+	                        	     */
+	                        	    socket.bind(null);
+	                        	    socket.connect((new InetSocketAddress(groupOwnerAddress.getHostAddress(), 8888)), 500);
+
+	                        	    /**
+	                        	     * Create a byte stream from a JPEG file and pipe it to the output stream
+	                        	     * of the socket. This data will be retrieved by the server device.
+	                        	     */
+	                        	    InputStream in = socket.getInputStream();
+	                        	    in.read(buf);
+	                        	    
+	                        	    Log.d("HHH", String.valueOf(buf));
+	                        	    
+	                        	    
+	                        	    in.close();
+	                        	} catch (Exception e) {
+	                        	    //catch logic
+	                        	}
+
+	                        	/**
+	                        	 * Clean up any open sockets when done
+	                        	 * transferring or if an exception occurred.
+	                        	 */
+	                        	finally {
+	                        	    if (socket != null) {
+	                        	        if (socket.isConnected()) {
+	                        	            try {
+	                        	                socket.close();
+	                        	            } catch (IOException e) {
+	                        	                //catch logic
+	                        	            }
+	                        	        }
+	                        	    }
+	                        	}
+	                        }
+	                    }
+					});
+	            }
 		} 
 	}
 }

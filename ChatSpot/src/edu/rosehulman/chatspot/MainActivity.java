@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -60,17 +65,10 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		mSendButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				MainActivity.this.sendMessage();
-			}
-		});
-		
 		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
 		    @Override
 		    public void onSuccess() {
-		    	Log.d("HHH", "SUCCESS");		    	
+
 		    }
 
 		    @Override
@@ -79,6 +77,34 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
+		mSendButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {					
+		    	mManager.requestPeers(mChannel, new PeerListListener() {
+					
+					@Override
+					public void onPeersAvailable(WifiP2pDeviceList peers) {
+						for(final WifiP2pDevice device : peers.getDeviceList()){
+							WifiP2pConfig config =  new WifiP2pConfig();
+							config.deviceAddress = device.deviceAddress;
+							
+							mManager.connect(mChannel, config, new ActionListener(){
+								@Override
+								public void onSuccess() {
+									//do nothing here
+								}
+
+								@Override
+								public void onFailure(int reason) {
+									Log.d("HHH", "FAILED TO CONNECT TO " + device.deviceName);
+									
+								}								
+							});
+						}
+					}
+				});
+			}
+		});	
 	}
 
 	@Override
