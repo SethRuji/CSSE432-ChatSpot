@@ -58,23 +58,23 @@ public class MainActivity extends Activity {
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_SEND) {
-					MainActivity.this.sendMessage();
+
+
+					mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+					    @Override
+					    public void onSuccess() {
+
+					    }
+
+					    @Override
+					    public void onFailure(int reasonCode) {
+					    	Log.d("HHH", "FAILURE");
+					    }
+					});
 					return true;
 				}
 				return false;
 			}
-		});
-
-		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-		    @Override
-		    public void onSuccess() {
-
-		    }
-
-		    @Override
-		    public void onFailure(int reasonCode) {
-		    	Log.d("HHH", "FAILURE");
-		    }
 		});
 		
 		mSendButton.setOnClickListener(new OnClickListener() {
