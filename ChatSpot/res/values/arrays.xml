@@ -18,8 +18,6 @@
         <item>#FF9800</item>
         <item>#FF5722</item>
         <item>#795548</item>
-        <item>#9E9E9E</item>
-        <item>#607D8B</item>
     </string-array>
     
     <string-array name="message_colors_tints">
@@ -40,8 +38,6 @@
         <item>#F57C00</item>
         <item>#E64A19</item>
         <item>#5D4037</item>
-        <item>#616161</item>
-        <item>#455A64</item>
     </string-array>
     
     <string-array name="action_bar_text_colors">
@@ -61,8 +57,6 @@
         <item>#000000</item>
         <item>#000000</item>
         <item>#FFFFFF</item>
-        <item>#FFFFFF</item>
-        <item>#000000</item>
         <item>#FFFFFF</item>
     </string-array>
 </resources>

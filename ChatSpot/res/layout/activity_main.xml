@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp" >
+    android:padding="5dp" 
+    android:background="#424242">
 
     <ListView
         android:id="@+id/messageContainer"
@@ -26,13 +27,6 @@
             android:hint="Type a message..."
             android:imeOptions="actionSend"
             android:inputType="textCapSentences" />
-
-        <Button
-            android:id="@+id/send"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:text="Send" />
     </LinearLayout>
 
 </RelativeLayout>

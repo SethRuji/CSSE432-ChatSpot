@@ -10,17 +10,13 @@ public class SenderAsyncTask extends AsyncTask<Void, Void, Boolean> {
 	private MainActivity context;
 	private String receiverAddress;
 	private Message message;
-
-	public SenderAsyncTask(MainActivity context, String receiverAddress, String text, long timestamp) {
-		this.context = context;
-		this.receiverAddress = receiverAddress;
-		this.message = new Message(context.getLocalIpAddress(), receiverAddress, text, context.getMessageColor(), timestamp);
-	}
 	
 	public SenderAsyncTask(MainActivity context, String receiverAddress, Message message) {
 		this.context = context;
 		this.receiverAddress = receiverAddress;
-		this.message = new Message(context.getLocalIpAddress(), receiverAddress, message.getText(), message.getColor(), message.getTimestamp());
+		this.message = message;
+		this.message.setSender(context.getLocalIpAddress());
+		this.message.setReceiver(receiverAddress);
 	}
 
 
@@ -51,7 +47,10 @@ public class SenderAsyncTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
 		if(result){
-			context.addMessageToContainer(message);
+			context.addSentMessageToContainer(message);
+		} else {
+			//couldn't send? probs can't connect so remove the friend from buddy list
+			this.context.disconnectFromBuddy(this.receiverAddress);
 		}
 	}
 	
