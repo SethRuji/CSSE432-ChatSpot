@@ -1,15 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp" 
-    android:background="#424242">
+    android:background="#424242"
+    android:padding="5dp" >
 
     <ListView
         android:id="@+id/messageContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/inputWrapper"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:listSelector="@android:color/transparent" />
 
     <LinearLayout
         android:id="@+id/inputWrapper"
